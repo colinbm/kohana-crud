@@ -4,11 +4,11 @@ class Crud_Core_Controller_Crud extends Controller_Auto_Template {
 	
 	const AUTH_ERROR      = 'You do not have sufficient rights.';
 	
-	const EDIT_SUCCESS    = 'Edit succeeded';
-	const EDIT_FAILURE    = 'Edit failed';
-	const NEW_SUCCESS     = 'Create succeeded';
-	const NEW_FAILURE     = 'Create failed';
-	const DELETE_SUCCESS  = 'Delete succeeded';
+	const EDIT_SUCCESS    = 'The {item} has been saved.';
+	const EDIT_FAILURE    = 'The {item} couldn\'t be saved. Please check for errors below.';
+	const NEW_SUCCESS     = 'The {item} has been created.';
+	const NEW_FAILURE     = 'The {item} couldn\'t be created. Please check for errors below.';
+	const DELETE_SUCCESS  = 'The {item} has been deleted.';
 	
 	
 	public static $model = 'base';
@@ -40,7 +40,7 @@ class Crud_Core_Controller_Crud extends Controller_Auto_Template {
 	protected function authorize() {
 		if (!Auth::instance()->logged_in('admin')) {
 			if (class_exists('Flash')) {
-				Flash::error($this::AUTH_ERROR);
+				Flash::error($this->message($this::AUTH_ERROR));
 			}
 			$this->request->redirect(URL::site(Route::get('default')->uri()));
 		}
@@ -70,10 +70,10 @@ class Crud_Core_Controller_Crud extends Controller_Auto_Template {
 			if ($object->id) $form->set_value('id', $object->id);
 			
 			if ($form->submit()) {
-				Flash::success(__($this::EDIT_SUCCESS));
+				Flash::success(__($this->message($this::EDIT_SUCCESS)));
 				$object->reload();
 			} else {
-				Flash::error(__($this::EDIT_FAILURE));
+				Flash::error(__($this->message($this::EDIT_FAILURE)));
 			}
 			
 		}
@@ -91,10 +91,10 @@ class Crud_Core_Controller_Crud extends Controller_Auto_Template {
 				$form->set_value($k, $v);
 			}
 			if ($form->submit()) {
-				Flash::success(__($this::NEW_SUCCESS));
+				Flash::success(__($this->message($this::NEW_SUCCESS)));
 				$this->request->redirect(Route::get($this->request->param('edit_route'))->uri(array_merge($redirect_params, array($this->request->param('guid') => $form->object->{$this->request->param('guid')}))));
 			} else {
-				Flash::error(__($this::NEW_FAILURE));
+				Flash::error(__($this->message($this::NEW_FAILURE)));
 			}
 		}
 
@@ -107,7 +107,7 @@ class Crud_Core_Controller_Crud extends Controller_Auto_Template {
 		$object = $factory->where($this->request->param('guid'), '=', $this->request->param($this->request->param('guid')))->find();
 
 		if ($this->request->method() == Request::POST && $this->request->param('confirm') === 'confirm') {
-			Flash::success(__($this::DELETE_SUCCESS));
+			Flash::success(__($this->message($this::DELETE_SUCCESS)));
 			$object->delete();
 			$this->request->redirect(Route::get($this->request->param('index_route'))->uri($redirect_params));
 		}
@@ -139,6 +139,10 @@ class Crud_Core_Controller_Crud extends Controller_Auto_Template {
 		
 		echo "OK\n";
 		
+	}
+
+	protected function message($string) {
+		return str_replace('{item}', $this::$model, $string);
 	}
 	
 	
