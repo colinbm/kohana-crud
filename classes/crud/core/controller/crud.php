@@ -20,6 +20,8 @@ class Crud_Core_Controller_Crud extends Controller_Auto_Template {
 	public static $route_params = array();
 	
 	public static $form;
+
+	public static $item_name;
 	
 	
 	public function before() {
@@ -142,7 +144,8 @@ class Crud_Core_Controller_Crud extends Controller_Auto_Template {
 	}
 
 	protected function message($string) {
-		return str_replace('{item}', $this::$model, $string);
+		$item_name = $this::$item_name ? $this::$item_name : $this::$model;
+		return str_replace('{item}', $item_name, $string);
 	}
 	
 	
