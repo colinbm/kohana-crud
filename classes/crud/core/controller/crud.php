@@ -44,7 +44,7 @@ class Crud_Core_Controller_Crud extends Controller_Auto_Template {
 			if (class_exists('Flash')) {
 				Flash::error($this->message($this::AUTH_ERROR));
 			}
-			$this->request->redirect(URL::site(Route::get('default')->uri()));
+			$this->request->redirect(Route::url('default'));
 		}
 	}
 	
