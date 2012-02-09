@@ -33,6 +33,7 @@ class Crud_Core_Route extends Kohana_Route {
 			->defaults(array(
 				'controller' => $controller,
 				'action'     => 'edit',
+				'edit_route' => $route_name . '_edit',
 				'guid'       => $guid,
 		));
 		if ($edit_alias) Route::set_alias("{$route_name}_edit_alias", "{$uri_prefix}/<{$guid}>", "{$route_name}_edit");
