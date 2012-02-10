@@ -4,6 +4,7 @@ class Crud_Core_Form_Search extends FormManager {
 
 	public $method = 'get';
 	public $custom_view = 'formmanager/search';
+	public $submit_text = 'Search';
 
 	public function apply_filters($factory) {
 		self::submit();
