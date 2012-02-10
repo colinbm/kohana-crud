@@ -21,6 +21,8 @@ class Crud_Core_Controller_Crud extends Controller_Auto_Template {
 	
 	public static $form;
 
+	public static $search_form;
+
 	public static $item_name;
 	
 	
@@ -53,6 +55,16 @@ class Crud_Core_Controller_Crud extends Controller_Auto_Template {
 		if ($order = $this->request->param('order')) {
 			$objects->order_by($order, $this->request->param('direction'));
 		}
+
+		if ($this::$search_form) {
+			/* @var $search_form Form_Search */
+			$search_form = new $this::$search_form();
+			if ($search_form->is_submitted()) {
+				$search_form->apply_filters($factory);
+			}
+			$this->template->content->search_form = $search_form;
+		}
+
 		if (class_exists('Pagination')) {
 			$this->template->content->pagination = new Pagination($factory, $this->request->param('page'), $this::$route.'_index', $this::$route_params, $this->request->param('per_page'));
 		} else {
