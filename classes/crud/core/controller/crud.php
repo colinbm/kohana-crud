@@ -23,6 +23,8 @@ class Crud_Core_Controller_Crud extends Controller_Auto_Template {
 
 	public static $search_form;
 
+	public static $search_fields;
+
 	public static $item_name;
 	
 	
@@ -56,9 +58,15 @@ class Crud_Core_Controller_Crud extends Controller_Auto_Template {
 			$objects->order_by($order, $this->request->param('direction'));
 		}
 
-		if ($this::$search_form) {
-			/* @var $search_form Form_Search */
-			$search_form = new $this::$search_form();
+		if ($this::$search_fields) {
+			$search_form = new Form_Search();
+			foreach($this::$search_fields as $field) {
+				$form = new $this::$form;
+				$search_form->fields[$field] = $form->fields[$field];
+				$search_form->fields[$field]['field_name'] = "search[{$form->fields[$field]['column_name']}]";
+				$search_form->fields[$field]['field_id']   = "search_{$form->fields[$field]['column_name']}";
+				$search_form->fields[$field]['attributes']['id'] = "search_{$form->fields[$field]['column_name']}";
+			}
 			if ($search_form->is_submitted()) {
 				$search_form->apply_filters($factory);
 			}
