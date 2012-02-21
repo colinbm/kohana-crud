@@ -60,8 +60,8 @@ class Crud_Core_Controller_Crud extends Controller_Auto_Template {
 
 		if ($this::$search_fields) {
 			$search_form = new Form_Search();
+			$form = new $this::$form;
 			foreach($this::$search_fields as $field) {
-				$form = new $this::$form;
 				$search_form->fields[$field] = $form->fields[$field];
 				$search_form->fields[$field]['field_name'] = "search[{$form->fields[$field]['column_name']}]";
 				$search_form->fields[$field]['field_id']   = "search_{$form->fields[$field]['column_name']}";
