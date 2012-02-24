@@ -20,7 +20,7 @@ Route::set_crud(
     'username'  # guid - default is id. routes become /users/<username>/edit, etc 
 );
 ```
-Your controller/user.php file would then contain:
+Your `controller/user.php` file would then contain:
 
 ```php
 <?php
