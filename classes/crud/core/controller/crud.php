@@ -140,7 +140,7 @@ class Crud_Core_Controller_Crud extends Controller_Auto_Template {
 	
 	public function action_sort() {
 		// Disable the view
-		$this->view = new stdClass;
+		if ($this->view instanceof ViewO) $this->view = new stdClass;
 		
 		parse_str($_REQUEST['order'], $order);
 		$ids_in_new_order = Arr::get($order, $this::$model, array());
