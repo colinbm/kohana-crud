@@ -25,10 +25,10 @@ Your `controller/user.php` file would then contain:
 ```php
 <?php
 class Controller_User extends Controller_Crud {
-	public static $model = 'user';
-	public static $route = 'user';
-	public static $form  = 'Form_User'; # *
-	public static $search_fields = array('username', 'first_name', 'last_name', 'email');
+	protected $model = 'user';
+	protected $route = 'user';
+	protected $form  = 'Form_User'; # *
+	protected $search_fields = array('username', 'first_name', 'last_name', 'email');
 }
 ```
 
