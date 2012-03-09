@@ -11,21 +11,16 @@ class Crud_Core_Controller_Crud extends Controller_Auto_Template {
 	const DELETE_SUCCESS  = 'The {item} has been deleted.';
 	
 	
-	public static $model = 'base';
+	protected $model;
+	protected $route;
+	protected $form;
+	static $order_by;
 	
-	public static $order_by;
+	protected $route_params = array();
 	
-	public static $route;
-	
-	public static $route_params = array();
-	
-	public static $form;
-
-	public static $search_form;
-
-	public static $search_fields;
-
-	public static $item_name;
+	protected $search_form;
+	protected $search_fields;
+	protected $item_name;
 	
 	
 	public function before() {
@@ -58,7 +53,7 @@ class Crud_Core_Controller_Crud extends Controller_Auto_Template {
 			$objects->order_by($order, $this->request->param('direction'));
 		}
 
-		if ($this::$search_fields) {
+		if ($this->search_fields) {
 			$search_form = new Form_Search();
 			$form = new $this::$form;
 			foreach($this::$search_fields as $field) {
@@ -74,7 +69,7 @@ class Crud_Core_Controller_Crud extends Controller_Auto_Template {
 		}
 
 		if (class_exists('Pagination')) {
-			$this->template->content->pagination = new Pagination($factory, $this->request->param('page'), $this::$route.'_index', $this::$route_params, $this->request->param('per_page'));
+			$this->template->content->pagination = new Pagination($factory, $this->request->param('page'), $this->route.'_index', $this->route_params, $this->request->param('per_page'));
 		} else {
 			$this->template->content->result = $factory->find_all();
 		}
@@ -83,9 +78,9 @@ class Crud_Core_Controller_Crud extends Controller_Auto_Template {
 	
 	public function action_edit($factory=null, $redirect_params=array()) {
 		
-		if (!$factory) $factory = ORM::factory($this::$model);
+		if (!$factory) $factory = ORM::factory($this->model);
 		$object = $factory->where($this->request->param('guid'), '=', $this->request->param($this->request->param('guid')))->find();
-		$form = new $this::$form($object->id);
+		$form = new $this->form($object->id);
 
 		if ($form->is_submitted()) {
 			// id should never be changed.
@@ -106,7 +101,7 @@ class Crud_Core_Controller_Crud extends Controller_Auto_Template {
 	}
 	
 	public function action_new($override=array(), $redirect_params=array()) {
-		$form = new $this::$form();
+		$form = new $this->form();
 		
 		if ($form->is_submitted()) {
 			foreach($override as $k => $v) {
@@ -143,10 +138,10 @@ class Crud_Core_Controller_Crud extends Controller_Auto_Template {
 		if ($this->view instanceof ViewO) $this->view = new stdClass;
 		
 		parse_str($_REQUEST['order'], $order);
-		$ids_in_new_order = Arr::get($order, $this::$model, array());
+		$ids_in_new_order = Arr::get($order, $this->model, array());
 		
 		$current_order = array();
-		foreach(ORM::factory($this::$model)->select('order')->where('id', 'IN', $ids_in_new_order)->find_all() as $object) {
+		foreach(ORM::factory($this->model)->select('order')->where('id', 'IN', $ids_in_new_order)->find_all() as $object) {
 			$current_order[] = $object->order;
 		}
 		
@@ -156,7 +151,7 @@ class Crud_Core_Controller_Crud extends Controller_Auto_Template {
 		}
 		
 		foreach($ids_in_new_order as $key => $id) {
-			$item = ORM::factory($this::$model, $id);
+			$item = ORM::factory($this->model, $id);
 			$item->order = $current_order[$key];
 			$item->save();
 		}
@@ -166,7 +161,7 @@ class Crud_Core_Controller_Crud extends Controller_Auto_Template {
 	}
 
 	protected function message($string) {
-		$item_name = $this::$item_name ? $this::$item_name : $this::$model;
+		$item_name = $this->item_name ? $this->item_name : $this->model;
 		return str_replace('{item}', $item_name, $string);
 	}
 	
