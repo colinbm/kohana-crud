@@ -48,15 +48,15 @@ class Crud_Core_Controller_Crud extends Controller_Auto_Template {
 	}
 	
 	public function action_index($factory=null) {
-		if (!$factory) $factory = ORM::factory($this::$model);
+		if (!$factory) $factory = ORM::factory($this->model);
 		if ($order = $this->request->param('order')) {
 			$objects->order_by($order, $this->request->param('direction'));
 		}
 
 		if ($this->search_fields) {
 			$search_form = new Form_Search();
-			$form = new $this::$form;
-			foreach($this::$search_fields as $field) {
+			$form = new $this->form;
+			foreach($this->search_fields as $field) {
 				$search_form->fields[$field] = $form->fields[$field];
 				$search_form->fields[$field]['field_name'] = "search[{$form->fields[$field]['column_name']}]";
 				$search_form->fields[$field]['field_id']   = "search_{$form->fields[$field]['column_name']}";
