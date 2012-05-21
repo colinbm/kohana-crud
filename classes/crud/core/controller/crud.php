@@ -120,7 +120,7 @@ class Crud_Core_Controller_Crud extends Controller_Auto_Template {
 	}
 
 	public function action_delete($redirect_params=array(), $factory=null) {
-		if (!$factory) $factory = ORM::factory($this::$model);
+		if (!$factory) $factory = ORM::factory($this->model);
 		$object = $factory->where($this->request->param('guid'), '=', $this->request->param($this->request->param('guid')))->find();
 
 		if ($this->request->method() == Request::POST && $this->request->param('confirm') === 'confirm') {
