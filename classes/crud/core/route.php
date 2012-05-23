@@ -2,7 +2,7 @@
 
 class Crud_Core_Route extends Kohana_Route {
 
-	public static function set_crud($route_name, $uri_prefix, $controller, $edit_alias = false,  $guid='id', $guid_regex = Route::REGEX_SEGMENT) {
+	public static function set_crud($route_name, $uri_prefix, $controller, $edit_alias = false,  $guid='id', $guid_regex = Route::REGEX_SEGMENT, $per_page = 50) {
 		$controller_class = "Controller_{$controller}";
 		if ($controller_class::$order_by) {
 			Route::set("{$route_name}_sort", "{$uri_prefix}/sort")
@@ -18,7 +18,7 @@ class Crud_Core_Route extends Kohana_Route {
 				'action'     => 'index',
 				'guid'       => $guid,
 				'page'       => 1,
-				'per_page'   => 50,
+				'per_page'   => $per_page,
 				'order'      => null,
 				'direction'  => 'asc'
 		));
