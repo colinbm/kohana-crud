@@ -2,7 +2,7 @@
 
 class Crud_Core_Route extends Kohana_Route {
 
-	public static function set_crud($route_name, $uri_prefix, $controller, $edit_alias = false,  $guid='id', $guid_regex = Route::REGEX_SEGMENT, $per_page = 50) {
+	public static function set_crud($route_name, $uri_prefix, $controller, $skip_show = false,  $guid='id', $guid_regex = Route::REGEX_SEGMENT, $per_page = 50) {
 		$controller_class = "Controller_{$controller}";
 		if ($controller_class::$order_by) {
 			Route::set("{$route_name}_sort", "{$uri_prefix}/sort")
@@ -36,8 +36,18 @@ class Crud_Core_Route extends Kohana_Route {
 				'edit_route' => $route_name . '_edit',
 				'guid'       => $guid,
 		));
-		if ($edit_alias) Route::set_alias("{$route_name}_edit_alias", "{$uri_prefix}/<{$guid}>", "{$route_name}_edit");
-
+		
+		if ($skip_show) {
+			Route::set_alias("{$route_name}_edit_alias", "{$uri_prefix}/<{$guid}>", "{$route_name}_edit");
+		} else {
+			Route::set("{$route_name}_show", "{$uri_prefix}/<{$guid}>", array($guid => $guid_regex))
+				->defaults(array(
+					'controller' => $controller,
+					'action'     => 'show',
+					'guid'       => $guid,
+			));
+		}
+		
 		Route::set("{$route_name}_delete", "{$uri_prefix}/<{$guid}>/delete(/<confirm>)", array($guid => $guid_regex, 'confirm' => 'confirm'))
 			->defaults(array(
 				'controller' => $controller,
