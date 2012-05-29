@@ -16,7 +16,7 @@ Route::set_crud(
     'user',     # route prefix - will create user_index, user_new, user_edit, user_delete    
     'users',    # uri prefix - will create users, users/new, users/<id>/edit, users/<id>/delete    
     'user',     # controller - this controller should extend Controller_Crud    
-    true,       # edit alias - if true, also creates /users/<id>, forwarding to /users/<id>/edit    
+    false,      # skip show - if true, forwards /users/<id>, to /users/<id>/edit instead of show route
     'username'  # guid - default is id. routes become /users/<username>/edit, etc 
 );
 ```
