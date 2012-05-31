@@ -50,7 +50,7 @@ class Crud_Core_Controller_Crud extends Controller_Auto_Template {
 	public function action_index($factory=null) {
 		if (!$factory) $factory = ORM::factory($this->model);
 		if ($order = $this->request->param('order')) {
-			$objects->order_by($order, $this->request->param('direction'));
+			$factory->order_by($order, $this->request->param('direction'));
 		}
 
 		if ($this->search_fields) {
