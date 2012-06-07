@@ -76,6 +76,12 @@ class Crud_Core_Controller_Crud extends Controller_Auto_Template {
 		
 	}
 	
+	public function action_show($factory=null, $redirect_params=array()) {
+		if (!$factory) $factory = ORM::factory($this->model);
+		$object = $factory->where($this->request->param('guid'), '=', $this->request->param($this->request->param('guid')))->find();
+		$this->template->content->object = $object;
+	}
+	
 	public function action_edit($factory=null, $redirect_params=array()) {
 		
 		if (!$factory) $factory = ORM::factory($this->model);
