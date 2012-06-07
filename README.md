@@ -1,7 +1,7 @@
 Kohana CRUD
 ===========
 
-Provides New (**C**reate), Index (**R**ead), Edit (**U**pdate), **D**elete functionality for the given model.
+Provides New (**C**reate), Index & Show (**R**ead), Edit (**U**pdate), **D**elete functionality for the given model.
 
 See example/ folder.
 
