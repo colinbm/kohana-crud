@@ -79,6 +79,7 @@ class Crud_Core_Controller_Crud extends Controller_Auto_Template {
 	public function action_show($factory=null, $redirect_params=array()) {
 		if (!$factory) $factory = ORM::factory($this->model);
 		$object = $factory->where($this->request->param('guid'), '=', $this->request->param($this->request->param('guid')))->find();
+		if (!$object->id) throw new HTTP_Exception_404;
 		$this->template->content->object = $object;
 	}
 	
@@ -86,6 +87,8 @@ class Crud_Core_Controller_Crud extends Controller_Auto_Template {
 		
 		if (!$factory) $factory = ORM::factory($this->model);
 		$object = $factory->where($this->request->param('guid'), '=', $this->request->param($this->request->param('guid')))->find();
+		if (!$object->id) throw new HTTP_Exception_404;
+		
 		$form = new $this->form($object->id);
 
 		if ($form->is_submitted()) {
